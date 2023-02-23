@@ -1,31 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
+import { map, Observable } from 'rxjs';
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
-
-export class JsonWebSocketSubject extends WebSocketSubject<any> {
-  override next(value:any) {
-    return super.next(JSON.stringify(value));
-  }
+export interface Message {
+  source: string;
+  content: string;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebSocketService {
+  private socketConnection$!: WebSocketSubject<Message>;
+  public messages$!: Observable<Message>;
 
-  private socketConnection$!: WebSocketSubject<{ message: string }>;
-  public messages$!:Observable<any>;
- 
-
-  constructor() { 
-    this.socketConnection$ = webSocket({url:'ws://localhost:10000',  deserializer: (event) => event.data});
+  constructor() {
+    this.socketConnection$ = webSocket({
+      url: 'ws://localhost:5000',
+    });
     this.messages$ = this.socketConnection$.asObservable();
   }
 
-
-  send(message:string){
-    this.socketConnection$.next({message:message});
-    
+  send(message: Message) {
+    console.log('message', message);
+    this.socketConnection$.next(message);
   }
 }
