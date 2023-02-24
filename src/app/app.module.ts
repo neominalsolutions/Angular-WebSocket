@@ -10,10 +10,11 @@ import { WebSocketService } from './web-socket.service';
   imports: [BrowserModule, FormsModule],
   providers: [
     {
-      provide: APP_INITIALIZER,
+      provide: APP_INITIALIZER, // uygulama ilk açılı injection_token
       multi: true,
       // connection açtık
-      useFactory: (ws: WebSocketService) => () => ws.messages$.subscribe(),
+      useFactory: (ws: WebSocketService) => () => ws.messages$.subscribe(), // tek bir instance ile subscribe
+      // bir önceki connection değerlerini kaybetmemek için subscribe olduk
       deps: [WebSocketService],
     },
   ],

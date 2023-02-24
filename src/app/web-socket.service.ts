@@ -19,10 +19,12 @@ export class WebSocketService {
       url: 'ws://localhost:5000',
     });
     this.messages$ = this.socketConnection$.asObservable();
+    // message dinlemeye başladık
   }
 
   send(message: Message) {
     console.log('message', message);
+    // socket sunucuna mesaj atma
     this.socketConnection$.next(message);
   }
 }
