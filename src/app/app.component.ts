@@ -19,7 +19,15 @@ export class AppComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const worker = new Worker(new URL('./report.worker', import.meta.url));
+
+    worker.postMessage('hello');
+
+    worker.onmessage = ({ data }) => {
+      console.log(`page got message: ${data}`);
+    };
+  }
 
   sendMessage() {
     this.socketService.send({ content: this.message, source: 'localhost' });
